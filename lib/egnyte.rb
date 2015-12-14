@@ -19,6 +19,7 @@ require "egnyte/user"
 require "egnyte/group"
 require "egnyte/link"
 require "egnyte/permission"
+require "egnyte/event"
 
 module Egnyte
 	EGNYTE_DOMAIN = "egnyte.com"
