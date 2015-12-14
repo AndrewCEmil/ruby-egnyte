@@ -14,8 +14,8 @@ module Egnyte
       Event::latest_and_oldest(@session)
     end
 
-    def each_event_since(base_event_id)
-      Event::each_event_since(@session, base_event_id)
+    def each_event_since(base_event_id, &block)
+      Event::each_event_since(@session, base_event_id, block)
     end
 
   end
@@ -45,11 +45,11 @@ module Egnyte
       session.get(url)
     end
 
-    def self.each_event_since(session, event_id)
+    def self.each_event_since(session, event_id, block)
       base_event_id = event_id
       loop do
         res = Event::since_event(session, base_event_id, {count: 100})
-        res["events"].each { |e| yield e }
+        res["events"].each { |e| block.call(e) }
         base_event_id = res["events"].last["id"]
         break if res["count"] < 100
       end

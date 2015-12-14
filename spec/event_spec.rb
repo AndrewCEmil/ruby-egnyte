@@ -65,10 +65,11 @@ describe Egnyte::Event do
       stub_request(:get, "https://test.egnyte.com/pubapi/v1/events?id=100&count=100")
           .to_return(:body => second_body.to_json, :status => 200)
       counter = 1
-      Egnyte::Event.each_event_since(@session, 1) do |event|
+      block = Proc.new do |event|
         expect(event["id"]).to eq(counter)
         counter += 1
       end
+      Egnyte::Event.each_event_since(@session, 1, block)
       expect(counter).to eq(102)
     end
 
