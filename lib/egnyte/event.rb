@@ -49,6 +49,7 @@ module Egnyte
       base_event_id = event_id
       loop do
         res = Event::since_event(session, base_event_id, {count: 100})
+        break if res["events"].nil?
         res["events"].each { |e| block.call(e) }
         base_event_id = res["events"].last["id"]
         break if res["count"] < 100
